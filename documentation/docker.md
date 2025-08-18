@@ -36,3 +36,53 @@ An image is a read-only template with instructions for creating a Docker contain
 A container is a runnable instance of an image. You can create, start, stop, move, or delete a container using the Docker API or CLI
 
 => Docker is written in the Go programming language.
+
+## 1. Project Setup
+
+#### Postgres database service
+
+- Pull the official postgres Image from the docker registry
+
+```sh
+$ docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+```
+
+- Run the container
+
+```sh
+$ docker run --name insta-training-db -e POSTGRES_PASSWORD=insta-training -d postgres
+```
+
+- We can always configure the Mapping PORT. In case we do not specify it while creating the container. (no straightforward command of that matter)
+
+we need to:
+
+-> inspect running containers
+
+```sh
+ docker ps
+```
+
+-> stop the running container:
+
+```sh
+ docker stop <container_name_or_id>
+```
+
+-> remove the container
+
+```sh
+ docker rm <container_name_or_id>
+```
+
+-> recreate the container with specifying the mapping PORT
+
+```sh
+$ docker run --name insta-training-db -e POSTGRES_PASSWORD=insta-training -p 5432:5432 -d postgres
+```
+
+- Inspect the container mapped PORT
+
+```sh
+ docker port <container_name_or_id>
+```
