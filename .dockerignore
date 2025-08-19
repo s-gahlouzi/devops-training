@@ -1,0 +1,18 @@
+# Ignore Git-related files
+.git/
+.gitignore
+
+# Ignore Node.js development dependencies
+node_modules/
+
+# Ignore build artifacts
+dist/
+build/
+
+# Ignore temporary files and logs
+*.tmp
+*.log
+
+# Ignore environment files, except for production
+.env*
+!.env.production

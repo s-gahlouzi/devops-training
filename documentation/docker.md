@@ -37,14 +37,14 @@ A container is a runnable instance of an image. You can create, start, stop, mov
 
 => Docker is written in the Go programming language.
 
-## 1. Project Setup
+## 1. Project Setup - Demo
 
 #### Postgres database service
 
 - Pull the official postgres Image from the docker registry
 
 ```sh
-$ docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+$ docker pull postgres
 ```
 
 - Run the container
@@ -53,7 +53,7 @@ $ docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postg
 $ docker run --name insta-training-db -e POSTGRES_PASSWORD=insta-training -d postgres
 ```
 
-- We can always configure the Mapping PORT. In case we do not specify it while creating the container. (no straightforward command of that matter)
+- We can always configure the Mapping PORT. In case we do not specify it while creating the container. (there is no straightforward command of that matter)
 
 we need to:
 
@@ -85,4 +85,96 @@ $ docker run --name insta-training-db -e POSTGRES_PASSWORD=insta-training -p 543
 
 ```sh
  docker port <container_name_or_id>
+```
+
+- Restart the container: (restart it with a -d flag)
+
+```sh
+ docker restart <container_name_or_id>
+```
+
+- start the container: (start the container with a detach mode)
+
+```sh
+ docker start <container_name_or_id>
+```
+
+### Docker Networking
+
+Docker networking facilitates communication between Docker containers, and between containers and the outside world, abstracting the underlying infrastructure.
+
+Docker provides various network drivers, each suited for different use cases.
+
+#### Network Drivers:
+
+- Bridge (default): Creates a private internal network for containers on a single host, allowing them to communicate by IP address. Port mapping is required for external access.
+
+- Host: Removes network isolation, directly using the host machine's network stack. This can simplify networking for some applications but reduces isolation.
+
+- Overlay: Enables multi-host container communication in a Docker Swarm or Kubernetes cluster, providing built-in service discovery, load balancing, and encryption.
+
+- None: Disables all networking for a container, useful for containers that do not require network access.
+
+- Macvlan/Ipvlan: Assigns a MAC address and IP address to containers directly from the physical network, making them appear as physical devices on the network.
+
+#### Create a name-based custom Network
+
+Containers connected to the same custom network can resolve each other by name
+
+```sh
+ docker network create <network_name>
+```
+
+1. ##### Port Mapping:
+
+To allow external access to services running inside a container on a bridge network, specific container ports must be mapped to host ports using the -p or --publish flag during container creation.
+
+2. ##### Network Isolation:
+
+Docker utilizes network namespaces to isolate container networks, providing a level of security and preventing conflicts between container network configurations.
+
+- Check the networks driver used for insta-training-db container:
+
+```sh
+ docker inspect <network_name>
+```
+
+###### Option 1: Re-create the container with a Host network
+
+```sh
+ docker run --name insta-training-db -e POSTGRES_PASSWORD=insta-training --network host -d postgres
+```
+
+###### Option 1: Access database from a docker API container runs on the same custom Bridge Network
+
+```sh
+ docker network create --driver bridge <network_name>
+```
+
+```sh
+ docker network ls
+```
+
+- Delete a Network
+
+```sh
+ docker network disconnect <network_name> <container_name_or_id>
+```
+
+```sh
+  docker network rm <network_name_or_id>
+```
+
+### Containerize the API component
+
+- Build the API container
+
+```sh
+  docker build -t <container_image_name> -f custom-docker-filename (.)
+```
+
+- Run the API container
+
+```sh
+  docker run --name insta-training-api-container -d insta-training-api-image
 ```
