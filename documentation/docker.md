@@ -178,3 +178,35 @@ Docker utilizes network namespaces to isolate container networks, providing a le
 ```sh
   docker run --name insta-training-api-container -d insta-training-api-image
 ```
+
+### Multi Stage builds
+
+### Build variables
+
+- build arguments (ARG) and environment variables (ENV) are similar. They're both declared in the Dockerfile and can be set using flags for the docker build command. Both can be used to parameterize the build. But they each serve a distinct purpose.
+
+1. ##### Build arguments
+
+- build arguments are variables we Use them to parameterize values of Dockerfile instructions.
+- They're not accessible or present in containers instantiated from the image
+
+```sh
+  docker build -t image-tag --build-arg NODE_ENV=development .
+```
+
+2. ##### Environment variables
+
+- Environment variables are passed through to the build execution environment, and persist in containers instantiated from the image.
+
+```sh
+  docker run --name container_name -e DATABASE_URL="..." image_name
+```
+
+3. ##### Build secrets
+
+- A build secret is any piece of sensitive information, such as a password or API token, consumed as part of your application's build process.
+
+Build arguments and environment variables are inappropriate for passing secrets to your build, because they persist in the final image. Instead, you should use secret mounts or SSH mounts, which expose secrets to your builds securely.
+
+=> keep info private within the container.
+=> secrets at runtime, never at build time!

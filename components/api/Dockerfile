@@ -22,6 +22,11 @@ ENV NODE_ENV=production
 COPY --from=builder /api/node_modules ./node_modules
 COPY --from=builder /api/dist ./dist
 COPY --from=builder /api/prisma ./prisma
+COPY --from=builder /api/generated ./generated
 ENV PORT=3001
+# ARG DATABASE_URL
+# ENV DATABASE_URL=$DATABASE_URL
+# RUN echo "=> => => => => => ${DATABASE_URL}"
+
 EXPOSE 3001
-CMD ["node", "dist/index.js"]
+CMD ["node", "dist/server.js"]
