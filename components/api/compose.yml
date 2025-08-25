@@ -1,0 +1,39 @@
+name: insta-training
+
+networks:
+  insta-training-network:
+    driver: bridge
+
+services:
+  db:
+    image: postgres
+    container_name: insta-training-db
+    environment:
+      - POSTGRES_PASSWORD=insta-training
+    ports:
+      - 4200:5432
+    volumes:
+      - insta-training-volume:/var/lib/postgresql/data
+    networks:
+      - insta-training-network
+    restart: always
+
+  api:
+    container_name: insta-training-api-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3001
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DATABASE_URL=postgresql://postgres:insta-training@insta-training-db:5432/custom-db-name?schema=public
+    networks:
+      - insta-training-network
+    depends_on:
+      - db
+    restart: always
+
+volumes:
+  insta-training-volume:
