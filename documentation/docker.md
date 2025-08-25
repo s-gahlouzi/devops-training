@@ -1,17 +1,46 @@
 ### 1. what is docker?
 
-- Docker is an open platform for developing, shipping, and running applications.
-- Docker allows you to separate your application from infrastructure.
-- Docker allows running an application inside a loosely isolated environment called containers.
-- The isolation and security let you run multiple containers simultaneously on given host.
+- Docker is a virtualization software. Makes development and deployment applications much easier. Also package applications with all the necessary dependencies, configurations, system, tools and runtime.
 
-  #### Containers
+#### Problematic: (what problem docker comes to solve)
 
-  - containers are lightweight and contains everything you need to run an application.
-  - The unit for distributing and testing your applications
-  - when you are ready, deploy your application into your production environment as a container or an orchestrated service. This works the same whether your production environment is a local data center, a cloud provider, or a hybrid of the two.
-  - allowing developers to work in standardized environments using local containers which provide your applications and services.
-  - Containers are great for continuous integration and continuous delivery (CI/CD) workflows.
+- Each developer needs to install and configure services on their OS and their local machines.
+
+- Installation process is different for OS environment
+
+- before docker containers, manually build and host the build file on a deployment server, with a different OS, a new environment, and potentially having dependencies versions conflicts.
+
+- Many steps are repeating
+
+#### Solution
+
+- With containers developers do not have to install services directly on their own local machines.
+
+- easily starting and stopping services with docker command.
+
+![alt text](images/docker-virtualization.jpg)
+
+- A machine consist of 3 main parts: Hardware, OS Kernel, and OS application Layer.
+
+- unlike virtual machines docker virtualize the application layer.
+
+- docker container contains the OS Application Layer and other services are installed on top of that application Layer. and it uses the kernel of the host.
+
+- In the other hand, Virtual machines virtualize the complete operating system. unlike VMs, docker images are lightweight compared to VM's image because they just have to implement one layer of the OS. which means docker save a lot of disk space.
+
+- Containers take second to start.
+
+- VM image can be run on different OS systems. on the other hand docker images are Linux based (we can not run them directly on Mac os or windows)
+
+- docker was initially built for Linux.
+
+- docker desktop comes to solve this issue, that includes:
+
+- docker engine: a docker server with a long running daemon process called "dockerd".
+- docker Cli client to interact and communicate with the docker server.
+- GUI client: a graphical user interface.
+
+**P.S:** While Docker can be used on other operating systems like macOS and Windows, it achieves this by running a lightweight Linux virtual machine within which the Docker daemon operates. This virtual machine provides the necessary Linux kernel environment for the Docker daemon to manage containers.
 
 ### Docker Architecture
 
@@ -30,6 +59,8 @@ When you use Docker, you are creating and using images, containers, networks, vo
 #### Image
 
 An image is a read-only template with instructions for creating a Docker container. Often, an image is based on another image, with some additional customization.
+
+=> portable artifact, easily shared and distributed
 
 #### Container
 
@@ -210,3 +241,28 @@ Build arguments and environment variables are inappropriate for passing secrets 
 
 => keep info private within the container.
 => secrets at runtime, never at build time!
+
+### Docker Volumes
+
+- Volumes are used for data persistence in docker. if we have databases or statefull applications we need to use that.
+
+- when created a volume, a folder in physical host file system is mounted into the virtual file system of docker.
+
+- docker volumes store data outside containers, makes it persistence across container restart.
+
+- when a volume is created, docker mounts it to the following path:
+  **/var/lib/docker/volumes/<volume_name>/\_data**
+
+1. Create a custom docker volume
+
+```sh
+  docker volume create <volume_name>
+```
+
+2. List docker volumes
+
+```sh
+  docker volume ls
+```
+
+### Docker Compose
