@@ -21,11 +21,12 @@ router.get("/api/v1/messages", async (req: Request, res: Response) => {
 });
 
 router.post("/api/v1/messages", async (req: Request, res: Response) => {
-  const { message } = req.body;
-  console.info("------------ message: ", message);
+  const { content } = req.body;
+  console.info("------------ body: ", req.body);
+
   const newMessage = await db.message.create({
     data: {
-      content: message,
+      content,
     },
   });
 
@@ -35,8 +36,10 @@ router.post("/api/v1/messages", async (req: Request, res: Response) => {
 
   // TODO: Send message to RabbitMQ
 
-  console.info("------------ newMessage Created: ", newMessage);
-  res.json({ data: newMessage, message: "Message created successfully" });
+  // console.info("------------ newMessage Created: ", newMessage);
+  res
+    .status(200)
+    .json({ data: newMessage, message: "Message created successfully" });
 });
 
 export default router;
