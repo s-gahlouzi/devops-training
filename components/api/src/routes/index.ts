@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
 import db from "../db";
+import { publishUserPrompts } from "../queue/producer";
 
 const router = Router();
 
@@ -34,12 +35,13 @@ router.post("/api/v1/messages", async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Failed to create message" });
   }
 
-  // TODO: Send message to RabbitMQ
+  // Publish message to RabbitMQ
+  await publishUserPrompts(content);
 
-  // console.info("------------ newMessage Created: ", newMessage);
-  res
-    .status(200)
-    .json({ data: newMessage, message: "Message created successfully" });
+  res.status(200).json({
+    data: newMessage,
+    message: "Message created successfully & published to Core Queue",
+  });
 });
 
 export default router;
