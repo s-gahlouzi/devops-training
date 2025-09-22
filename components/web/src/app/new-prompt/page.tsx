@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { API_URL } from "../config";
 
 interface ChatMessage {
   id: string;
@@ -90,7 +91,7 @@ export default function ChatPage() {
 
     try {
       // Save to API
-      await fetch("http://localhost:3001/api/v1/messages", {
+      await fetch(`${API_URL}/api/v1/messages`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -132,7 +133,7 @@ export default function ChatPage() {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleSubmit(e as any);
+      handleSubmit(e);
     }
   };
 

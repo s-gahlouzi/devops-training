@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { API_URL } from "../config";
 
 interface Message {
   id: string;
@@ -27,7 +28,7 @@ export default function MessagesPage() {
   const fetchMessages = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:3001/api/v1/messages");
+      const response = await fetch(`${API_URL}/api/v1/messages`);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch messages: ${response.statusText}`);
