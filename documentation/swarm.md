@@ -48,7 +48,7 @@ Its purpose is to automate the deployment, scaling, and management of containeri
 1. Enable Docker Swarm
 
 ```sh
-docker swarm init --advertise-addr 192.168.127.2
+docker swarm init --advertise-addr 192.*.*.*
 ```
 
 2. Check nodes
