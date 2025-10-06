@@ -14,7 +14,7 @@
 
 #### Solution
 
-- With containers developers do not have to install services directly on their own local machines.
+- With containers, developers do not have to install services directly on their own local machines.
 
 - easily starting and stopping services with docker command.
 
