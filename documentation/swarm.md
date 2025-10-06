@@ -83,7 +83,7 @@ Docker stack is a collection of services that make up an application in a specif
 docker swarm join-token worker
 ```
 
-```sh
+```bash
 docker swarm join --token
 ```
 
