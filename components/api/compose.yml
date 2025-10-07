@@ -1,8 +1,9 @@
-name: insta-training
-
 networks:
   insta-training-network:
     driver: bridge
+
+volumes:
+  insta-training-volume:
 
 services:
   db:
@@ -19,7 +20,7 @@ services:
     restart: always
 
   api:
-    container_name: insta-training-api-container
+    container_name: insta-training-api
     build:
       context: .
       dockerfile: Dockerfile
@@ -34,6 +35,3 @@ services:
     depends_on:
       - db
     restart: always
-
-volumes:
-  insta-training-volume:
