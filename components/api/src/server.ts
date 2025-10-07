@@ -1,6 +1,6 @@
 import express from "express";
 import routes from "./routes";
-import { consumeCoreAnswers } from "./queue/consumer";
+// import { consumeCoreAnswers } from "./queue/consumer";
 import cors from "cors";
 
 const app = express();
@@ -18,5 +18,5 @@ app.use("/", routes);
 app.listen(PORT, async () => {
   console.log(`🚀 Express server running at http://localhost:${PORT}`);
 
-  await consumeCoreAnswers();
+  // await consumeCoreAnswers();
 });

@@ -1,6 +1,5 @@
 import { Router, Request, Response } from "express";
 import db from "../db";
-import { publishUserPrompts } from "../queue/producer";
 
 const router = Router();
 
@@ -36,7 +35,7 @@ router.post("/api/v1/messages", async (req: Request, res: Response) => {
   }
 
   // Publish message to RabbitMQ
-  await publishUserPrompts(content);
+  // await publishUserPrompts(content);
 
   res.status(200).json({
     data: newMessage,
