@@ -23,20 +23,6 @@ Its purpose is to automate the deployment, scaling, and management of containeri
 
 - **Desired state reconciliation:** The swarm manager constantly monitors the cluster's actual state and works to match it to the declared desired state. For example, if a node hosting containers fails, the manager automatically replaces the lost containers.
 
-### Feature limitations
-
-- **Fewer advanced features:** Compared to the industry-leading Kubernetes, Docker Swarm lacks many advanced features. It has fewer automation capabilities and doesn't offer sophisticated options for networking, security, or deployment strategies.
-
-- **No automated scaling:** Docker Swarm does not include a built-in horizontal pod autoscaler to automatically adjust the number of replicas based on metrics like CPU usage. Scaling must be performed manually.
-
-- **Basic monitoring and logging:** Swarm provides only basic server logs and event tools. For comprehensive monitoring and logging, you must integrate third-party tools, unlike Kubernetes, which offers these features out-of-the-box.
-
-- **Less robust fault tolerance:** While Swarm offers high availability, its self-healing and resilience capabilities are not as advanced as those in Kubernetes
-
-- **Not ideal for large-scale deployments:** Docker Swarm can struggle with very large and complex workloads involving thousands of containers. While it is suitable for medium-sized applications, it cannot compete with Kubernetes' ability to manage enterprise-level infrastructure. The maximum recommended number of manager nodes is also limited to seven, which may not be sufficient for very large environments.
-
-- **Uncertain future:** The ecosystem around Docker Swarm is smaller than Kubernetes, and Docker itself has shifted its focus. Docker, Inc. now recommends Kubernetes for most production environments, which has led to less active development of Swarm in recent years
-
 ### Docker Swarm vs Docker Compose:
 
 - **Docker Compose:** is suitable for scaling on a single host, primarily for development and testing environments.
@@ -233,3 +219,17 @@ Safer than baking passwords into images or Compose files.
 ```sh
 echo "password" | docker secret create postgres_password -
 ```
+
+### Feature limitations
+
+- **Fewer advanced features:** Compared to the industry-leading Kubernetes, Docker Swarm lacks many advanced features. It has fewer automation capabilities and doesn't offer sophisticated options for networking, security, or deployment strategies.
+
+- **No automated scaling:** Docker Swarm does not include a built-in horizontal pod autoscaler to automatically adjust the number of replicas based on metrics like CPU usage. Scaling must be performed manually.
+
+- **Basic monitoring and logging:** Swarm provides only basic server logs and event tools. For comprehensive monitoring and logging, you must integrate third-party tools, unlike Kubernetes, which offers these features out-of-the-box.
+
+- **Less robust fault tolerance:** While Swarm offers high availability, its self-healing and resilience capabilities are not as advanced as those in Kubernetes
+
+- **Not ideal for large-scale deployments:** Docker Swarm can struggle with very large and complex workloads involving thousands of containers. While it is suitable for medium-sized applications, it cannot compete with Kubernetes' ability to manage enterprise-level infrastructure. The maximum recommended number of manager nodes is also limited to seven, which may not be sufficient for very large environments.
+
+- **Uncertain future:** The ecosystem around Docker Swarm is smaller than Kubernetes, and Docker itself has shifted its focus. Docker, Inc. now recommends Kubernetes for most production environments, which has led to less active development of Swarm in recent years
