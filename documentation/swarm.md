@@ -142,6 +142,8 @@ docker swarm leave --force
 
 If you don’t declare a network, Swarm uses ingress, but that’s mainly for external traffic, not service-to-service communication.
 
+- In Docker Swarm, each service is assigned a virtual hostname equal to its service name, which resolves via Docker’s internal DNS across the Swarm overlay network.
+
 2. ###### Local Images
 
 In Compose, you can have both **build:** and **image:.** If you forget **image:**, Compose will auto-generate one when building.
