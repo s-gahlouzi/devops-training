@@ -79,6 +79,8 @@ devops-training/
 │   └── core/          # Message processing service
 ├── documentation/      # Project documentation and diagrams
 └── README.md          # This file
+
+
 ```
 
 ## Contributing
