@@ -11,15 +11,15 @@ interface ChatMessage {
   isLoading?: boolean;
 }
 
-interface ApiResponse {
-  data: {
-    id: string;
-    content: string;
-    createdAt: string;
-    updatedAt: string;
-  };
-  message: string;
-}
+// interface ApiResponse {
+//   data: {
+//     id: string;
+//     content: string;
+//     createdAt: string;
+//     updatedAt: string;
+//   };
+//   message: string;
+// }
 
 // Fake LLM responses for demonstration
 const generateFakeLLMResponse = (userPrompt: string): string => {
@@ -90,7 +90,7 @@ export default function ChatPage() {
 
     try {
       // Save to API
-      await fetch("http://localhost:3001/api/v1/messages", {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/messages`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -132,7 +132,7 @@ export default function ChatPage() {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleSubmit(e as any);
+      handleSubmit(e);
     }
   };
 

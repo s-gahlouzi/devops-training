@@ -27,7 +27,9 @@ export default function MessagesPage() {
   const fetchMessages = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:3001/api/v1/messages");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/messages`
+      );
 
       if (!response.ok) {
         throw new Error(`Failed to fetch messages: ${response.statusText}`);
