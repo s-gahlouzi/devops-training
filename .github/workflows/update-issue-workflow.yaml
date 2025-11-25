@@ -1,4 +1,4 @@
-name: Add label to PR
+name: Update Issue
 
 on:
     issues:
@@ -18,3 +18,16 @@ jobs:
                   repo: context.repo.repo,
                   labels: ['bug']
                 })
+    self-assign:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Self-assign PR
+          uses: actions/github-script@v7
+          with:
+            script: |
+              octokit.rest.issues.addAssignees({
+                owner:context.repo.owner,
+                repo:context.repo.repo,
+                issue_number:context.issue.number,
+                assignees: [context.actor]
+              });
