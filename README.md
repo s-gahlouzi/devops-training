@@ -84,3 +84,4 @@ devops-training/
 ## Contributing
 
 This project serves as a training ground for DevOps practices. Feel free to explore the codebase and experiment with different deployment strategies.
+
