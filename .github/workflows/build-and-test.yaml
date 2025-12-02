@@ -7,16 +7,20 @@ jobs:
     build:
         name: Build
         runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: ./components/web
         steps:
             - uses: actions/checkout@v3
               name: Check out code
 
             - uses: mr-smithers-excellent/docker-build-push@v6
               name: Build & push Docker image
+              
               with:
                 image: maskteer/devops-training
                 tags: latest
                 registry: docker.io
-                dockerfile: components/web/Dockerfile
+                dockerfile: Dockerfile
                 username: ${{ secrets.DOCKER_USERNAME }}
                 password: ${{ secrets.DOCKER_PASSWORD }}
