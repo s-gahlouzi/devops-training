@@ -7,20 +7,14 @@ jobs:
     build:
         name: Build
         runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: components/web
         steps:
-            - name: Print current directory
-              run: |
-                echo "Current directory: $(pwd)"
-                echo "Components directory: $(pwd)/components/web"
             - uses: actions/checkout@v3
               name: Check out code
 
             - uses: mr-smithers-excellent/docker-build-push@v6
               name: Build & push Docker image
               with:
+                directory: components/web
                 image: maskteer/devops-training
                 tags: latest
                 registry: docker.io
