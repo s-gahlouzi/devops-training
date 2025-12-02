@@ -21,6 +21,6 @@ jobs:
                 image: maskteer/devops-training
                 tags: latest
                 registry: docker.io
-                dockerfile: Dockerfile
+                dockerfile: components/web/Dockerfile
                 username: ${{ secrets.DOCKER_USERNAME }}
                 password: ${{ secrets.DOCKER_PASSWORD }}
