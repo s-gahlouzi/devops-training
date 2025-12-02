@@ -17,3 +17,16 @@ jobs:
                     repo: context.repo.repo,
                     labels: ['Bug']
                   })
+    add-assignee-to-issue:
+        name: Add assignee to this issue
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/github-script@v8
+              with:
+                script: |
+                  github.rest.issues.addAssignees({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: context.issue.number,
+                    assignees: ['s-gahlouzi']
+                  })
