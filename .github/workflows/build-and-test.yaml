@@ -11,6 +11,10 @@ jobs:
             run:
                 working-directory: components/web
         steps:
+            - name: Print current directory
+              run: |
+                echo "Current directory: $(pwd)"
+                echo "Components directory: $(pwd)/components/web"
             - uses: actions/checkout@v3
               name: Check out code
 
