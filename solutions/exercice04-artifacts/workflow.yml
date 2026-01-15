@@ -1,0 +1,69 @@
+name: Exercice 04 - Artifacts
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: 20
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: [api, core, web]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve package settings
+        id: vars
+        run: |
+          case "${{ matrix.package }}" in
+            api)
+              echo "workdir=components/api" >> "$GITHUB_OUTPUT"
+              echo "lock=components/api/package-lock.json" >> "$GITHUB_OUTPUT"
+              echo "cmd=npm run build" >> "$GITHUB_OUTPUT"
+              echo "artifact_name=api-dist" >> "$GITHUB_OUTPUT"
+              echo "artifact_path=components/api/dist" >> "$GITHUB_OUTPUT"
+              ;;
+            core)
+              echo "workdir=components/core" >> "$GITHUB_OUTPUT"
+              echo "lock=components/core/package-lock.json" >> "$GITHUB_OUTPUT"
+              echo "cmd=npm run build" >> "$GITHUB_OUTPUT"
+              echo "artifact_name=core-dist" >> "$GITHUB_OUTPUT"
+              echo "artifact_path=components/core/dist" >> "$GITHUB_OUTPUT"
+              ;;
+            web)
+              echo "workdir=components/web" >> "$GITHUB_OUTPUT"
+              echo "lock=components/web/package-lock.json" >> "$GITHUB_OUTPUT"
+              echo "cmd=npm run lint && npm run build" >> "$GITHUB_OUTPUT"
+              echo "artifact_name=web-next" >> "$GITHUB_OUTPUT"
+              echo "artifact_path=components/web/.next" >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: ${{ steps.vars.outputs.lock }}
+
+      - name: Install
+        run: npm ci
+        working-directory: ${{ steps.vars.outputs.workdir }}
+
+      - name: Build
+        run: ${{ steps.vars.outputs.cmd }}
+        working-directory: ${{ steps.vars.outputs.workdir }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.vars.outputs.artifact_name }}
+          path: ${{ steps.vars.outputs.artifact_path }}
+          if-no-files-found: warn
+          retention-days: 7

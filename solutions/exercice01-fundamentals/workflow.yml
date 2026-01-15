@@ -1,0 +1,36 @@
+name: Exercice 01 - Fundamentals
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  info:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Print context
+        run: |
+          echo "repo=${GITHUB_REPOSITORY}"
+          echo "ref=${GITHUB_REF}"
+          echo "sha=${GITHUB_SHA}"
+          echo "actor=${GITHUB_ACTOR}"
+          echo "runner_os=${RUNNER_OS}"
+          node --version
+          npm --version
+      - name: Job summary
+        run: |
+          {
+            echo "## Exercice 01"
+            echo ""
+            echo "- Repo: \`${GITHUB_REPOSITORY}\`"
+            echo "- Ref: \`${GITHUB_REF}\`"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Runner: \`${RUNNER_OS}\`"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,82 @@
+name: Exercice 03 - Monorepo matrix + paths
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: 20
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            api:
+              - 'components/api/**'
+            core:
+              - 'components/core/**'
+            web:
+              - 'components/web/**'
+      - id: set-matrix
+        run: |
+          pkgs=()
+          if [[ "${{ steps.filter.outputs.api }}" == "true" ]]; then pkgs+=('"api"'); fi
+          if [[ "${{ steps.filter.outputs.core }}" == "true" ]]; then pkgs+=('"core"'); fi
+          if [[ "${{ steps.filter.outputs.web }}" == "true" ]]; then pkgs+=('"web"'); fi
+          json="[$(IFS=,; echo "${pkgs[*]}")]"
+          echo "matrix=$json" >> "$GITHUB_OUTPUT"
+
+  ci:
+    needs: changes
+    if: ${{ needs.changes.outputs.matrix != '[]' }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.changes.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve package settings
+        id: vars
+        run: |
+          case "${{ matrix.package }}" in
+            api)
+              echo "workdir=components/api" >> "$GITHUB_OUTPUT"
+              echo "lock=components/api/package-lock.json" >> "$GITHUB_OUTPUT"
+              echo "cmd=npm run build" >> "$GITHUB_OUTPUT"
+              ;;
+            core)
+              echo "workdir=components/core" >> "$GITHUB_OUTPUT"
+              echo "lock=components/core/package-lock.json" >> "$GITHUB_OUTPUT"
+              echo "cmd=npm run build" >> "$GITHUB_OUTPUT"
+              ;;
+            web)
+              echo "workdir=components/web" >> "$GITHUB_OUTPUT"
+              echo "lock=components/web/package-lock.json" >> "$GITHUB_OUTPUT"
+              echo "cmd=npm run lint && npm run build" >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: ${{ steps.vars.outputs.lock }}
+
+      - name: Install
+        run: npm ci
+        working-directory: ${{ steps.vars.outputs.workdir }}
+
+      - name: Check
+        run: ${{ steps.vars.outputs.cmd }}
+        working-directory: ${{ steps.vars.outputs.workdir }}

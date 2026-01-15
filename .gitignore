@@ -13,5 +13,6 @@ build
 .env.test
 .env.production
 .env.development.local
+.cursor
 generated
 migrations
