@@ -1,0 +1,20 @@
+name: Exercice 01 - Fundamentals
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  ci-exercise01-fundamentals:
+    name: Exercise 01 CI CD fundamentals
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🧪 Display basic info (repo, branch, commit sha, runner OS)
+        run: |
+          echo Github Repo => ${{GITHUB_REPOSITORY}}
+          echo Branch Name => ${{GITHUB_REF_NAME}}
+          echo Commit sha => ${{GITHUB_SHA}}
+
+      - name: 🗃️ Job Summary
+        run: |
+          echo "# This a brief Summary for the current running job ;) " >> ${{GITHUB_STEP_SUMMARY}}
