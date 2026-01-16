@@ -1,0 +1,11 @@
+name: Exercice 01 - Fundamentals
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  exercise-01-fundamentals-info:
+    uses: ./.github/workflows/reusable-api-ci.yml
+    with:
+      node-version: "20"
