@@ -4,6 +4,13 @@
 
 Create your first workflow that runs on PRs and can be manually triggered.
 
+pull request event means:
+
+- PR opened
+- PR synchronized (new commits pushed)
+- PR reopened
+- PR closed (merged or not)
+
 ## You will create
 
 - `.github/workflows/exercice01-fundamentals.yml`
