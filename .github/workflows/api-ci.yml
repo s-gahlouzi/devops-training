@@ -11,10 +11,10 @@ jobs:
     steps:
       - name: 🧪 Display basic info (repo, branch, commit sha, runner OS)
         run: |
-          echo Github Repo => ${{GITHUB_REPOSITORY}}
-          echo Branch Name => ${{GITHUB_REF_NAME}}
-          echo Commit sha => ${{GITHUB_SHA}}
+          echo Github Repo => $GITHUB_REPOSITORY
+          echo Branch Name => $GITHUB_REF_NAME
+          echo Commit sha => $GITHUB_SHA
 
       - name: 🗃️ Job Summary
         run: |
-          echo "# This a brief Summary for the current running job ;) " >> ${{GITHUB_STEP_SUMMARY}}
+          echo "# This a brief Summary for the current running job ;) " >> $GITHUB_STEP_SUMMARY
