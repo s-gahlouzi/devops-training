@@ -22,7 +22,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          version-node: ${{inputs.node-version}}
+          node-version: ${{inputs.node-version}}
 
       - name: 🧪 Display basic info (repo, branch, commit sha, runner OS)
         run: |
