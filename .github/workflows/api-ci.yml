@@ -4,6 +4,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   ci-exercise01-fundamentals:
     name: Exercise 01 CI CD fundamentals
@@ -11,10 +14,26 @@ jobs:
     steps:
       - name: 🧪 Display basic info (repo, branch, commit sha, runner OS)
         run: |
-          echo "Github Repo => $GITHUB_REPOSITORY"
-          echo "Branch Name => $GITHUB_REF_NAME"
-          echo "Commit sha => $GITHUB_SHA"
+          echo "Github Repo: $GITHUB_REPOSITORY"
+          echo "Branch REF Name: $GITHUB_REF_NAME"
+          echo "Branch REF: $GITHUB_REF"
+          echo "Commit sha: $GITHUB_SHA"
+          echo "PR branch: $GITHUB_HEAD_REF"
+          echo "Runner OS: $RUNNER_OS"
+          echo "Runner Arch: $RUNNER_ARCH"
+          echo "Runner Name: $RUNNER_NAME"
+          echo "Runner Temp: $RUNNER_TEMP"
+          echo "Runner Workspace: $GITHUB_WORKSPACE"
+          node  --version
+          npm   --version
 
       - name: 🗃️ Job Summary
         run: |
-          echo "# This a brief Summary for the current running job ;) " >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## Exercice 01"
+            echo ""
+            echo "- Repo: \`${GITHUB_REPOSITORY}\`"
+            echo "- Ref: \`${GITHUB_REF}\`"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Runner: \`${RUNNER_OS}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
