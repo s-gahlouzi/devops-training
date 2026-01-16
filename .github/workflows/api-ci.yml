@@ -6,6 +6,6 @@ on:
 
 jobs:
   exercise-01-fundamentals-info:
-    uses: ./exercices/exercice-01-fundamentals/.github/workflows/reusable-example.yml@v1
+    uses: ./exercices/exercice-01-fundamentals/.github/workflows/reusable-example.yml
     with:
       node-version: "20"
