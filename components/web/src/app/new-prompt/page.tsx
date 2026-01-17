@@ -132,7 +132,6 @@ export default function ChatPage() {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      console.log("handleKeyPress", e);
       handleSubmit(e);
     }
   };
