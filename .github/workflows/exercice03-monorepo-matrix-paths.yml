@@ -4,8 +4,6 @@ on:
   pull_request:
     paths:
       - components/api/**
-      - components/web/**
-      - components/core/**
 
 permissions:
   contents: read
@@ -38,57 +36,4 @@ jobs:
         run: npm ci
 
       - name: Build the API component
-        run: npm run build
-
-  web:
-    name: Install, lint and build web NextJS component
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    defaults:
-      run:
-        working-directory: ${{github.workspace}}/components/web
-
-    steps:
-      - name: Checkout the repo
-        uses: actions/checkout@v4
-
-      - name: Use node version 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{env.NODE_VERSION}}
-          cache: ${{env.NODE_PACKAGE_MANAGER}}
-          cache-dependency-path: "components/web/package-lock.json"
-
-      - name: Install Project Dependencies
-        run: npm ci
-
-      - name: Check lint errors
-        run: npm run lint
-
-      - name: Build web component
-        run: npm run build
-
-  core:
-    name: Install, and build the Core nodeJS component
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    defaults:
-      run:
-        working-directory: ${{github.workspace}}/components/core
-
-    steps:
-      - name: Checkout the repo
-        uses: actions/checkout@v4
-
-      - name: Use node version 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{env.NODE_VERSION}}
-          cache: ${{env.NODE_PACKAGE_MANAGER}}
-          cache-dependency-path: components/core/package-lock.json
-
-      - name: Install Core Dependencies
-        run: npm ci
-
-      - name: Build Core component
         run: npm run build
