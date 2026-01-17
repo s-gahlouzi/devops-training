@@ -9,13 +9,12 @@ permissions:
 env:
   NODE_VERSION: "20"
   NODE_PACKAGE_MANAGER: "npm"
-  TIMEOUT_MINUTES: 15
 
 jobs:
   api:
     name: Install and build the api component
     runs-on: ubuntu-latest
-    timeout-minutes: ${{env.TIMEOUT_MINUTES}}
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: ${{github.workspace}}/components/api
@@ -40,7 +39,7 @@ jobs:
   web:
     name: Install, lint and build web NextJS component
     runs-on: ubuntu-latest
-    timeout-minutes: ${{env.TIMEOUT_MINUTES}}
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: ${{github.workspace}}/components/web
@@ -68,7 +67,7 @@ jobs:
   core:
     name: Install, and build the Core nodeJS component
     runs-on: ubuntu-latest
-    timeout-minutes: ${{env.TIMEOUT_MINUTES}}
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: ${{github.workspace}}/components/core
