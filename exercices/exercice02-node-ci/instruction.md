@@ -6,7 +6,7 @@ Build a basic CI that validates all packages in this repo.
 
 ## You will create
 
-- `.github/workflows/exercice02-node-ci.yml`
+- `.github/workflows/exercise02-node-ci.yml`
 
 ## Requirements
 
