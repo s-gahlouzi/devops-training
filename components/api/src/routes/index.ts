@@ -13,6 +13,7 @@ router.get("/health", (req: Request, res: Response) => {
 
 router.get("/api/v1/messages", async (req: Request, res: Response) => {
   const messages = await db.message.findMany();
+  console.info("test CI");
   if (!messages) {
     return res.status(404).json({ message: "No messages found" });
   }

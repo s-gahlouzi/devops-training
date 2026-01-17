@@ -1,0 +1,39 @@
+name: Monorepo Optimization with Matrix Path
+
+on:
+  pull_request:
+    paths:
+      - components/api/**
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "20"
+  NODE_PACKAGE_MANAGER: "npm"
+
+jobs:
+  api:
+    name: Install and build the api component
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: ${{github.workspace}}/components/api
+
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+
+      - name: Use node version 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{env.NODE_VERSION}}
+          cache: ${{env.NODE_PACKAGE_MANAGER}}
+          cache-dependency-path: "components/api/package-lock.json"
+
+      - name: Install API component Dependencies
+        run: npm ci
+
+      - name: Build the API component
+        run: npm run build
