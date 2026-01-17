@@ -25,7 +25,7 @@ jobs:
 
       - name: Build the API component
         working-directory: ${{github.workspace}}/components/api
-        run: npm build
+        run: npm run build
 
   web-install-lint-build:
     name: Install, lint and build web NextJS component
