@@ -68,13 +68,18 @@ jobs:
         run: npm run lint
 
       - name: Build web component
-        run: npm run build
+        run: |
+          npm run build
+          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
+          echo "PWD=$(pwd)"
+          ls -ls
 
       - name: Upload Web Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: "web-artifacts"
           path: components/web/.next/**
+          if-no-files-found: error
 
   core:
     name: Install, and build the Core nodeJS component
