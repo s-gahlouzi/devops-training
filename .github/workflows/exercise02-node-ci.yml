@@ -15,7 +15,7 @@ jobs:
   api:
     name: Install and build the api component
     runs-on: ubuntu-latest
-    timeout-minutes: ${{TIMEOUT_MINUTES}}
+    timeout-minutes: ${{env.TIMEOUT_MINUTES}}
     defaults:
       run:
         working-directory: ${{github.workspace}}/components/api
@@ -27,8 +27,8 @@ jobs:
       - name: Use node version 20
         uses: actions/setup-node@v4
         with:
-          node-version: ${{NODE_VERSION}}
-          cache: ${{NODE_PACKAGE_MANAGER}}
+          node-version: ${{env.NODE_VERSION}}
+          cache: ${{env.NODE_PACKAGE_MANAGER}}
           cache-dependency-path: "components/api/package-lock.json"
 
       - name: Install API component Dependencies
@@ -40,7 +40,7 @@ jobs:
   web:
     name: Install, lint and build web NextJS component
     runs-on: ubuntu-latest
-    timeout-minutes: ${{TIMEOUT_MINUTES}}
+    timeout-minutes: ${{env.TIMEOUT_MINUTES}}
     defaults:
       run:
         working-directory: ${{github.workspace}}/components/web
@@ -52,8 +52,8 @@ jobs:
       - name: Use node version 20
         uses: actions/setup-node@v4
         with:
-          node-version: ${{NODE_VERSION}}
-          cache: ${{NODE_PACKAGE_MANAGER}}
+          node-version: ${{env.NODE_VERSION}}
+          cache: ${{env.NODE_PACKAGE_MANAGER}}
           cache-dependency-path: "components/web/package-lock.json"
 
       - name: Install Project Dependencies
@@ -68,7 +68,7 @@ jobs:
   core:
     name: Install, and build the Core nodeJS component
     runs-on: ubuntu-latest
-    timeout-minutes: ${{TIMEOUT_MINUTES}}
+    timeout-minutes: ${{env.TIMEOUT_MINUTES}}
     defaults:
       run:
         working-directory: ${{github.workspace}}/components/core
@@ -80,8 +80,8 @@ jobs:
       - name: Use node version 20
         uses: actions/setup-node@v4
         with:
-          node-version: ${{NODE_VERSION}}
-          cache: ${{NODE_PACKAGE_MANAGER}}
+          node-version: ${{env.NODE_VERSION}}
+          cache: ${{env.NODE_PACKAGE_MANAGER}}
           cache-dependency-path: components/core/package-lock.json
 
       - name: Install Core Dependencies
