@@ -6,7 +6,7 @@ Publish useful build outputs from CI runs to help debugging and verification.
 
 ## You will create
 
-- `.github/workflows/exercice04-artifacts.yml`
+- `.github/workflows/exercise04-artifacts.yml`
 
 ## Requirements
 
