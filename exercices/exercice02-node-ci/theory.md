@@ -27,3 +27,13 @@
 - Running `npm ci` at the repo root instead of inside each package directory.
 - Sharing one cache key across packages (causes incorrect hits/misses).
 - Treating lint/build requirements as “global” when they’re package-specific.
+
+## Notes
+
+##### `timeout-minutes`
+
+- Prevents a job from hanging forever (useful if npm ci stalls, network issues, etc.). Not required, but good hygiene.
+
+##### `defaults.run.working-directory`
+
+it sets a default working directory for all run: steps in that job.
