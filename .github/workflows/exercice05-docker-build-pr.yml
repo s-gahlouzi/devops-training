@@ -14,7 +14,7 @@ env:
 jobs:
   API:
     name: build docker API image
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: components/api
@@ -39,4 +39,4 @@ jobs:
           context: components/api
           file: components/api/Dockerfile
           push: false
-          tag: bettaibi/api:latest
+          tags: bettaibi/api:latest
