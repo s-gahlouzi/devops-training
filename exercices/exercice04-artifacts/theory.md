@@ -72,6 +72,6 @@ echo "workdir=components/api" >> "$GITHUB_OUTPUT"
 
 - And later you can read it as:
 
-- `${{ steps.vars.outputs.workdir }}`
+- `${{ steps.vars.outputs.workdir }}` note that **vars** is the step id (you can call it whatever)
 
 It’s the modern, recommended replacement for the old `::set-output` command.
