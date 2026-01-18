@@ -1,0 +1,42 @@
+name: Exercise02 pull docker image in PR (no push)
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "20"
+  PACKAGE_MANAGER: "npm"
+
+jobs:
+  API:
+    name: build docker API image
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: components/api
+
+    steps:
+      - name: checkout the repo
+        uses: actions/checkout@v4
+
+      - name: use node version 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{env.NODE_VERSION}}
+          cache: ${{env.PACKAGE_MANAGER}}
+          cache-dependency-path: components/api/package-lock.json
+
+      - name: setup docker buildX
+        uses: docker/setup-buildx-action@v3
+
+      - name: build the docker file
+        uses: docker/build-push-action@v6
+        with:
+          context: components/api
+          file: components/api/Dockerfile
+          push: false
+          tags: bettaibi/api:latest
