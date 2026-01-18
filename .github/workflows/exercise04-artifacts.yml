@@ -56,15 +56,15 @@ jobs:
           cache-dependency-path: ${{steps.vars.outputs.lock}}
 
       - name: Install Dependencies
-        working-directory: ${{steps.var.outputs.workdir}}
+        working-directory: ${{steps.vars.outputs.workdir}}
         run: npm ci
 
       - name: Build the component
-        working-directory: ${{steps.var.outputs.workdir}}
+        working-directory: ${{steps.vars.outputs.workdir}}
         run: npm run build
 
       - name: Upload build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{steps.var.outputs.artifact_name}}
-          path: ${{steps.var.outputs.artifact_path}}
+          name: ${{steps.vars.outputs.artifact_name}}
+          path: ${{steps.vars.outputs.artifact_path}}
