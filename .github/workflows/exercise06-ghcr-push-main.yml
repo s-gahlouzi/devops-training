@@ -44,5 +44,5 @@ jobs:
           context: components/api
           file: component/api/Dockerfile
           tags: ghcr.io/${{github.repository}}/api
-          cache-from: gha
-          cache-to: gha,mode=max
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
