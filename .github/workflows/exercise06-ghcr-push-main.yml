@@ -42,7 +42,7 @@ jobs:
         with:
           push: true
           context: components/api
-          file: component/api/Dockerfile
+          file: components/api/Dockerfile
           tags: ghcr.io/${{github.repository}}/api
           cache-from: type=gha
           cache-to: type=gha,mode=max
