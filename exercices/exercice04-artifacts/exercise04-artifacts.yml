@@ -1,0 +1,72 @@
+name: Exercise 04 Artifacts
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "20"
+  NODE_PACKAGE_MANAGER: "npm"
+
+jobs:
+  upload-artifacts:
+    name: Install, build and upload Artifacts for API, WEB and Core components
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        package: [api, web, core]
+
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+
+      - name: Resolve package settings
+        id: vars
+        run: |
+          case "${{ matrix.package }}" in
+            api)
+              echo "workdir=components/api" >> "$GITHUB_OUTPUT"
+              echo "lock=components/api/package-lock.json" >> "$GITHUB_OUTPUT"
+              echo "cmd=npm run build" >> "$GITHUB_OUTPUT"
+              echo "artifact_name=api-dist" >> "$GITHUB_OUTPUT"
+              echo "artifact_path=components/api/dist" >> "$GITHUB_OUTPUT"
+              ;;
+            core)
+              echo "workdir=components/core" >> "$GITHUB_OUTPUT"
+              echo "lock=components/core/package-lock.json" >> "$GITHUB_OUTPUT"
+              echo "cmd=npm run build" >> "$GITHUB_OUTPUT"
+              echo "artifact_name=core-dist" >> "$GITHUB_OUTPUT"
+              echo "artifact_path=components/core/dist" >> "$GITHUB_OUTPUT"
+              ;;
+            web)
+              echo "workdir=components/web" >> "$GITHUB_OUTPUT"
+              echo "lock=components/web/package-lock.json" >> "$GITHUB_OUTPUT"
+              echo "cmd=npm run lint && npm run build" >> "$GITHUB_OUTPUT"
+              echo "artifact_name=web-build" >> "$GITHUB_OUTPUT"
+              echo "artifact_path=components/web/.next" >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+
+      - name: Use node version 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{env.NODE_VERSION}}
+          cache: ${{env.NODE_PACKAGE_MANAGER}}
+          cache-dependency-path: ${{ steps.vars.outputs.lock }}
+
+      - name: Install Dependencies
+        working-directory: ${{ steps.vars.outputs.workdir }}
+        run: npm ci
+
+      - name: Build the component
+        working-directory: ${{ steps.vars.outputs.workdir }}
+        run: ${{ steps.vars.outputs.cmd }}
+
+      - name: Upload build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.vars.outputs.artifact_name }}
+          path: ${{ steps.vars.outputs.artifact_path }}
