@@ -24,3 +24,23 @@
 - Not setting `permissions:` (token ends up unable to push).
 - Logging into the wrong registry host.
 - Accidentally publishing from non-main events (this exercise should only publish on `push` to `main`).
+
+## Notes
+
+```bash
+concurrency:
+  group: exercice06-${{ github.ref }}
+  cancel-in-progress: true
+```
+
+This controls how many runs of this workflow are allowed at the same time for the same “group”.
+
+1. `group: exercice06-${{ github.ref }}`
+
+- Defines the concurrency key.
+- ${{ github.ref }} is the Git ref that triggered the run (for your case usually refs/heads/main).
+- So all runs on the same ref share the same group (ex: exercice06-refs/heads/main).
+
+2. `cancel-in-progress: true`
+
+- If a new run starts for the same group, GitHub Actions cancels the currently running older one and keeps the newest.
