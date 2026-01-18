@@ -30,5 +30,11 @@ jobs:
           cache: ${{env.PACKAGE_MANAGER}}
           cache-dependency-path: components/api/package-lock.json
 
-      - name: Build docker image
-        run: docker build -t api-image .
+      - name: setup docker buildX
+        uses: docker/setup-buildx-action@v3
+
+      - name: build the docker file
+        uses: docker/build-push-action@v6
+        with:
+          push: false
+          tag: bettaibi/api:latest
