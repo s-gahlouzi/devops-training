@@ -6,7 +6,7 @@ On merges to `main`, build and push the API image to GitHub Container Registry (
 
 ## You will create
 
-- `.github/workflows/exercice06-ghcr-push-main.yml`
+- `.github/workflows/exercise06-ghcr-push-main.yml`
 
 ## Requirements
 
