@@ -11,103 +11,60 @@ env:
   NODE_PACKAGE_MANAGER: "npm"
 
 jobs:
-  api:
-    name: Install and build the api component
+  upload-artifacts:
+    name: Install, build and upload Artifacts for API, WEB and Core components
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    defaults:
-      run:
-        working-directory: ${{github.workspace}}/components/api
+    strategy:
+      fail-fast: true
+      matrix:
+        package: [api, web, core]
 
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v4
+
+      - name: Resolve package settings
+        run: case "${{matrix.package}}" in
+          api)
+          echo  "workdir=components/api" >> "$GITHUB_OUTPUT"
+          echo  "lock=components/api/package-lock.json" >> "$GITHUB_OUTPUT"
+          echo  "cmd=npm run build" >> "$GITHUB_OUTPUT"
+          echo  "artifact_name=api-dist" >> "$GITHUB_OUTPUT"
+          echo  "artifact_path=components/api/dist" >> "$GITHUB_OUTPUT"
+          ;;
+          core)
+          echo  "workdir=components/core" >> "$GITHUB_OUTPUT"
+          echo  "lock=components/core/package-lock.json" >> "$GITHUB_OUTPUT"
+          echo  "cmd=npm run build" >>  "$GITHUB_OUTPUT"
+          echo  "artifact_name=core-dist" >> "$GITHUB_OUTPUT"
+          echo  "artifact_path=components/core/dist" >> "$GITHUB_OUTPUT"
+          ;;
+          web)
+          echo  "workdir=components/web" >> "$GITHUB_OUTPUT"
+          echo  "lock=components/web/package-lock.json" >> "$GITHUB_OUTPUT"
+          echo  "cmd=npm run lint && npm run build" >>  "$GITHUB_OUTPUT"
+          echo  "artifact_name=web-build" >> "$GITHUB_OUTPUT"
+          echo  "artifact_path=components/web/.next" >> "$GITHUB_OUTPUT"
+          ;;
+          esac
 
       - name: Use node version 20
         uses: actions/setup-node@v4
         with:
           node-version: ${{env.NODE_VERSION}}
           cache: ${{env.NODE_PACKAGE_MANAGER}}
-          cache-dependency-path: "components/api/package-lock.json"
+          cache-dependency-path: ${{steps.vars.outputs.lock}}
 
-      - name: Install API component Dependencies
+      - name: Install Dependencies
+        working-directory: ${{steps.var.outputs.workdir}}
         run: npm ci
 
-      - name: Build the API component
+      - name: Build the component
+        working-directory: ${{steps.var.outputs.workdir}}
         run: npm run build
 
-      - name: Upload API build Artifacts
+      - name: Upload build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: "api_artifact"
-          path: components/api/dist/**
-
-  web:
-    name: Install, lint and build web NextJS component
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    defaults:
-      run:
-        working-directory: ${{github.workspace}}/components/web
-
-    steps:
-      - name: Checkout the repo
-        uses: actions/checkout@v4
-
-      - name: Use node version 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{env.NODE_VERSION}}
-          cache: ${{env.NODE_PACKAGE_MANAGER}}
-          cache-dependency-path: "components/web/package-lock.json"
-
-      - name: Install Project Dependencies
-        run: npm ci
-
-      - name: Check lint errors
-        run: npm run lint
-
-      - name: Build web component
-        run: |
-          npm run build
-          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
-          echo "PWD=$(pwd)"
-          ls -ls
-
-      - name: Upload Web Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: "web-artifacts"
-          path: components/web/.next/**
-          if-no-files-found: error
-
-  core:
-    name: Install, and build the Core nodeJS component
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    defaults:
-      run:
-        working-directory: ${{github.workspace}}/components/core
-
-    steps:
-      - name: Checkout the repo
-        uses: actions/checkout@v4
-
-      - name: Use node version 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{env.NODE_VERSION}}
-          cache: ${{env.NODE_PACKAGE_MANAGER}}
-          cache-dependency-path: components/core/package-lock.json
-
-      - name: Install Core Dependencies
-        run: npm ci
-
-      - name: Build Core component
-        run: npm run build
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: "core_Artifacts"
-          path: components/core/dist/**
+          name: ${{steps.var.outputs.artifact_name}}
+          path: ${{steps.var.outputs.artifact_path}}
