@@ -31,4 +31,4 @@ jobs:
           cache-dependency-path: components/api/package-lock.json
 
       - name: Build docker image
-        run: docker build -t .
+        run: docker build -t api-image .
