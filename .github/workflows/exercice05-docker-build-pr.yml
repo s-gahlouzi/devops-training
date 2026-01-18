@@ -36,5 +36,7 @@ jobs:
       - name: build the docker file
         uses: docker/build-push-action@v6
         with:
+          context: components/api
+          file: components/api/Dockerfile
           push: false
           tag: bettaibi/api:latest
