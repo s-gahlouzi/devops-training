@@ -7,9 +7,10 @@ module.exports = {
   collectCoverageFrom: [
     "src/**/*.{ts,tsx}",
     "!src/**/*.d.ts",
+    "!src/server.ts",
     "!src/**/*.test.{ts,tsx}",
     "!src/**/*.spec.{ts,tsx}",
   ],
   coverageDirectory: "coverage",
-  coverageReporters: ["text", "lcov", "html"],
+  coverageReporters: ["text", "lcov", "html", "json-summary"],
 };
