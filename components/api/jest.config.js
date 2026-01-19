@@ -12,5 +12,5 @@ module.exports = {
     "!src/**/*.spec.{ts,tsx}",
   ],
   coverageDirectory: "coverage",
-  coverageReporters: ["text", "lcov", "html", "json-summary"],
+  coverageReporters: ["text", "lcov", "html", "cobertura"],
 };

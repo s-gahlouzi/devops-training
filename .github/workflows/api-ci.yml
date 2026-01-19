@@ -44,8 +44,14 @@ jobs:
           path: components/api/coverage
 
       - name: View Test Coverage in PR - upload reports to codecov
-        uses: codecov/codecov-action@v4
+        uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          files: components/api/coverage/lcov.info
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
+          filename: components/api/coverage/cobertura-coverage.xml
+          badge: true
+          fail_below_min: true
+          format: markdown
+          hide_branch_rate: false
+          hide_complexity: true
+          indicators: true
+          output: both
+          thresholds: "60 80"
