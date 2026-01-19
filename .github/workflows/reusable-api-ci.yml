@@ -16,10 +16,6 @@ on:
         type: string
         required: true
 
-permissions:
-  contents: read
-  pull-requests: write # Required for CodeCoverageSummary to comment on PRs
-
 jobs:
   API:
     name: Test, build and display Coverage on PRs
