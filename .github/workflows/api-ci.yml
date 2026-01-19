@@ -1,0 +1,49 @@
+name: test and build the API component
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write # Required for codecov to comment on PRs
+
+env:
+  NODE_VERSION: "20"
+  PACKAGE_MANAGER: "npm"
+
+jobs:
+  API:
+    name: Test, build and display Coverage on PRs
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: components/api
+
+    steps:
+      - name: checkout the repo
+        uses: actions/checkout@v4
+
+      - name: use node version 20 / cache dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{env.NODE_VERSION}}
+          cache: ${{env.PACKAGE_MANAGER}}
+          cache-dependency-path: ${{github.workspace}}/components/api
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Tests
+        run: "npm run test:coverage"
+
+      - name: Upload Test Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: components/api/coverage
+
+      - name: View Test Coverage in PR - upload reports to codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: components/api/coverage/lcov.info
