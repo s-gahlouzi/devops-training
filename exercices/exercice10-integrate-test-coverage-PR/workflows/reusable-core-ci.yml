@@ -1,0 +1,28 @@
+name: Build Core component
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  build-core:
+    name: "Build Core"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: components/core
+
+    steps:
+      - name: use node version 20 / cache dependencies
+        uses: ./.github/actions/setup-node-deps
+        with:
+          node-version: "20"
+          cache-dependency-path: components/core/package-lock.json
+          working-directory: components/core
+
+      - name: Build Core
+        run: npm run build

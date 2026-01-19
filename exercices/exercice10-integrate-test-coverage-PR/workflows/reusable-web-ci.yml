@@ -1,0 +1,37 @@
+name: lint, build Web component
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  build-Web:
+    name: lint and build the web component
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: components/web
+
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+
+      - name: use node version 20 / cache dependencies
+        uses: ./.github/actions/setup-node-deps
+        with:
+          node-version: "20"
+          cache-dependency-path: components/web/package-lock.json
+          working-directory: components/web
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: lint web
+        run: npm run lint
+
+      - name: Build Web
+        run: npm run build

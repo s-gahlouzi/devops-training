@@ -1,0 +1,58 @@
+name: Main orchestrator workflow
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{github.workflow}}-${{github.ref}}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  change-detection:
+    runs-on: ubuntu-latest
+    outputs:
+      core: ${{steps.filter.outputs.core}}
+      api: ${{steps.filter.outputs.api}}
+      web: ${{steps.filter.outputs.web}}
+
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+
+      - name: "detect path change"
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            api:
+              - 'components/api/**'
+            core:
+              - 'components/core/**' 
+            web:
+              - 'components/web/**'
+
+  Orchestrate-API:
+    needs: [change-detection]
+    if: needs.change-detection.outputs.api == 'true'
+    uses: ./.github/workflows/reusable-api-ci.yml
+    permissions:
+      contents: read
+      pull-requests: write
+
+  Orchestrate-Web:
+    needs: [change-detection]
+    if: needs.change-detection.outputs.web == 'true'
+    uses: ./.github/workflows/reusable-web-ci.yml
+    permissions:
+      contents: read
+
+  orchestrator-core:
+    needs: [change-detection]
+    if: needs.change-detection.outputs.core == 'true'
+    uses: ./.github/workflows/reusable-core-ci.yml
+    permissions:
+      contents: read

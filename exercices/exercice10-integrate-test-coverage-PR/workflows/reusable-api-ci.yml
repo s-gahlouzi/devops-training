@@ -1,0 +1,60 @@
+name: test and build the API component
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  API:
+    name: Test, build and display Coverage on PRs
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: components/api
+
+    steps:
+      - name: checkout the repo
+        uses: actions/checkout@v4
+
+      - name: use node version 20 / cache dependencies
+        uses: ./.github/actions/setup-node-deps
+        with:
+          node-version: "20"
+          cache-dependency-path: components/api/package-lock.json
+          working-directory: components/api
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Tests
+        run: "npm run test:coverage"
+
+      - name: Upload Test Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: components/api/coverage
+
+      - name: View Test Coverage in PR - upload reports to codecov
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: components/api/coverage/cobertura-coverage.xml
+          badge: true
+          fail_below_min: true
+          format: markdown
+          hide_branch_rate: false
+          hide_complexity: true
+          indicators: true
+          output: both
+          thresholds: "30 80"
+
+      - name: Add Coverage Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: code-coverage-results.md
+
+      - name: Build the APP
+        run: npm run build
