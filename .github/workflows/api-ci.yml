@@ -77,7 +77,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: components/api
-          file: component/api/Dockerfile
+          file: components/api/Dockerfile
           push: true
           tags: ghrc.io/${{github.repository}}/api
           cache-from: type=gha
