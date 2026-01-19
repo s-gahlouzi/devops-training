@@ -13,7 +13,6 @@ permissions:
 
 jobs:
   Orchestrate-API:
-    name: "test, build API component"
     uses: ./.github/workflows/reusable-api-ci.yml
     with:
       node-version: "20"
@@ -22,3 +21,21 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+
+  Orchestrate-Web:
+    uses: ./.github/workflows/reusable-web-ci.yml
+    with:
+      node-version: "20"
+      package-manager: "npm"
+      cache-dependency-path: components/web/package-lock.json
+    permissions:
+      contents: read
+
+  orchestrator-core:
+    uses: ./.github/workflows/reusable-core-ci.yml
+    with:
+      node-version: "20"
+      package-manager: "npm"
+      cache-dependency-path: components/core/package-lock.json
+    permissions:
+      contents: read
