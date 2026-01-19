@@ -79,6 +79,6 @@ jobs:
           context: components/api
           file: components/api/Dockerfile
           push: true
-          tags: ghrc.io/${{github.repository}}/api
+          tags: ghcr.io/${{github.repository}}/api
           cache-from: type=gha
-          cache-to: type=gha, mode=max
+          cache-to: type=gha,mode=max
