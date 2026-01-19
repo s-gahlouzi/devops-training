@@ -6,6 +6,7 @@ on:
 permissions:
   contents: read
   pull-requests: write # Required for CodeCoverageSummary to comment on PRs
+  packages: write
 
 env:
   NODE_VERSION: "20"
