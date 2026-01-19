@@ -3,18 +3,6 @@ name: test and build the API component
 on:
   workflow_dispatch:
   workflow_call:
-    inputs:
-      node-version:
-        type: string
-        required: false
-        default: "20"
-      package-manager:
-        type: string
-        required: false
-        default: "npm"
-      cache-dependency-path:
-        type: string
-        required: true
 
 jobs:
   API:
@@ -30,11 +18,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: use node version 20 / cache dependencies
-        uses: actions/setup-node@v4
+        uses: ./.github/actions/setup-node-deps
         with:
-          node-version: ${{inputs.node-version}}
-          cache: ${{inputs.package-manager}}
-          cache-dependency-path: ${{github.workspace}}/${{inputs.cache-dependency-path}}
+          node-version: "20"
+          cache-dependency-path: components/api/package-lock.json
+          working-directory: components/api
 
       - name: Install dependencies
         run: npm ci

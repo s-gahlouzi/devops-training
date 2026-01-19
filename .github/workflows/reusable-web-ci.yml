@@ -3,18 +3,6 @@ name: lint, build Web component
 on:
   workflow_dispatch:
   workflow_call:
-    inputs:
-      node-version:
-        type: string
-        required: false
-        default: "20"
-      package-manager:
-        type: string
-        required: false
-        default: "npm"
-      cache-dependency-path:
-        type: string
-        required: true
 
 permissions:
   contents: read
@@ -33,11 +21,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: use node version 20 / cache dependencies
-        uses: actions/setup-node@v4
+        uses: ./.github/actions/setup-node-deps
         with:
-          node-version: ${{inputs.NODE_VERSION}}
-          cache: ${{inputs.package-manager}}
-          cache-dependency-path: ${{inputs.cache-dependency-path}}
+          node-version: "20"
+          cache-dependency-path: components/web/package-lock.json
+          working-directory: components/web
 
       - name: Install dependencies
         run: npm ci

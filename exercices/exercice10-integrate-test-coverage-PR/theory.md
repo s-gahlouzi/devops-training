@@ -46,3 +46,12 @@ jobs:
     if: needs.changes.outputs.web == 'true'
     uses: ./.github/workflows/web-ci.yml
 ```
+
+## What is a Composite Action?
+
+A composite action is a custom GitHub Action that bundles multiple steps into a single reusable action. Think of it as a function that groups common steps together.
+
+- location: .github/actions/
+- contains: steps only
+- best for: Repeated step sequences
+  note: always create a folder with the action name, yml file should be named action.yml
