@@ -15,6 +15,9 @@ jobs:
     uses: ./.github/workflows/reusable-api-ci.yml
     with:
       cache-dependency-path: components/api/package-lock.json
+    permissions:
+      pull-requests: write
+      contents: read
 
   Api-deploy:
     name: Deploy API docker image to GHCR
