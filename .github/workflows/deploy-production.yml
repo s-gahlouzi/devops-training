@@ -13,8 +13,6 @@ permissions:
 jobs:
   API-build:
     uses: ./.github/workflows/reusable-api-ci.yml
-    with:
-      cache-dependency-path: components/api/package-lock.json
     permissions:
       pull-requests: write
       contents: read
