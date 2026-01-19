@@ -37,7 +37,7 @@ jobs:
 
   Orchestrate-API:
     needs: [change-detection]
-    if: needs.change-detection.outputs.api
+    if: needs.change-detection.outputs.api == 'true'
     uses: ./.github/workflows/reusable-api-ci.yml
     with:
       node-version: "20"
@@ -49,7 +49,7 @@ jobs:
 
   Orchestrate-Web:
     needs: [change-detection]
-    if: needs.change-detection.outputs.web
+    if: needs.change-detection.outputs.web == 'true'
     uses: ./.github/workflows/reusable-web-ci.yml
     with:
       node-version: "20"
@@ -60,7 +60,7 @@ jobs:
 
   orchestrator-core:
     needs: [change-detection]
-    if: needs.change-detection.outputs.core
+    if: needs.change-detection.outputs.core == 'true'
     uses: ./.github/workflows/reusable-core-ci.yml
     with:
       node-version: "20"
