@@ -11,16 +11,8 @@ concurrency:
 jobs:
   Orchestrate-API:
     name: "test, build API component"
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-
-    steps:
-      - name: checkout the repo
-        uses: actions/checkout@v4
-
-      - name: call reusable API CI
-        uses: ./.github/workflows/reusable-api-ci.yml
-        with:
-          node-version: "20"
-          package-manager: "npm"
-          cache-dependency-path: components/api/package-lock.json
+    uses: ./.github/workflows/reusable-api-ci.yml
+    with:
+      node-version: "20"
+      package-manager: "npm"
+      cache-dependency-path: components/api/package-lock.json
