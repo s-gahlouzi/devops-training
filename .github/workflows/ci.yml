@@ -15,6 +15,9 @@ jobs:
     timeout-minutes: 15
 
     steps:
+      - name: checkout the repo
+        uses: actions/checkout@v4
+
       - name: call reusable API CI
         uses: ./.github/workflows/reusable-api-ci.yml
         with:
