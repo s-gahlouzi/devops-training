@@ -21,8 +21,6 @@ This happens because:
 
 **CI/CD = Continuous Integration + Continuous Delivery/Deployment**
 
-Think of it as an **assembly line for software**.
-
 ---
 
 ## 1️⃣ Continuous Integration (CI)
@@ -307,10 +305,6 @@ job_b:
   needs: job_a
 ```
 
-Internally:
-
-- GitHub builds a **DAG (Directed Acyclic Graph)**
-
 ## 7️⃣ Secrets & Environment Variables
 
 ### Internally:
@@ -347,12 +341,6 @@ This feeds into:
 - Branch protection rules
 - Notifications
 
-## Mental Model (Remember This 🧠)
-
-> **GitHub Actions = Event → YAML → Fresh machine → Steps → Result**
-
-If you understand this, debugging becomes easy.
-
 ## Common Beginner Misconceptions
 
 ❌ “My runner remembers previous runs”
@@ -363,15 +351,6 @@ If you understand this, debugging becomes easy.
 
 ❌ “Actions are magic”
 ✅ Actions are just scripts
-
----
-
-Got it 👍
-Since you already know the basics, let’s **shift into “things that actually matter in real CI/CD systems”**—the stuff that causes pain in production and interviews.
-
-I’ll organize this as **advanced concepts + why they matter + how GitHub Actions implements them**.
-
----
 
 # Advanced GitHub Actions & CI/CD Concepts
 
@@ -636,22 +615,7 @@ Advanced teams:
 - Split workflows
 - Cache aggressively
 
----
-
-## What Actually Differentiates Senior-Level CI/CD Knowledge
-
-- Design pipelines as **systems**
-- Understand isolation, trust, cost, and failure modes
-- Optimize for **feedback time**, not perfection
-
----
-
-Excellent choice. This is exactly **senior / staff-level CI/CD thinking**.
-I’ll do this in **two clear parts**, focusing on _design decisions_, not just YAML.
-
----
-
-# PART 1: Designing a Production-Grade CI/CD Pipeline
+# Designing a Production-Grade CI/CD Pipeline
 
 This is **not** a toy pipeline. This is how pipelines are designed for real products.
 
@@ -982,12 +946,5 @@ CI/CD integrates with:
 | YAML focus       | System design                 |
 | Fast once        | Fast always                   |
 | Local fix        | Platform solution             |
-
----
-
-## Final Mental Model 🧠
-
-> **CI/CD is a product.**
-> It has users, costs, security risks, and uptime requirements.
 
 ---
