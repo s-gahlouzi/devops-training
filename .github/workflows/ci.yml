@@ -1,0 +1,64 @@
+name: API, Web and Core workflow
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  API:
+    name: "Build and Install API dependencies"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: components/api
+
+    steps:
+      - name: checkout the repo
+        uses: actions/checkout@v4
+
+      - name: "Install dependencies"
+        run: npm ci
+
+      - name: build API
+        run: npm run build
+  web:
+    name: "lint, Build and Install Web dependencies"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: components/web
+
+    steps:
+      - name: checkout the repo
+        uses: actions/checkout@v4
+
+      - name: "Install dependencies"
+        run: npm ci
+
+      - name: "run lint"
+        run: npm run lint
+
+      - name: "run build"
+        run: npm run build
+
+  core:
+    name: "build & install Core dependencies"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: components/core
+
+    steps:
+      - name: checkout the repo
+        uses: actions/checkout
+
+      - name: "install dependencies"
+        run: npm ci
+
+      - name: "build core"
+        run: npm run build
