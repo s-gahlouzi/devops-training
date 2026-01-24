@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - components/api/**
+      - components/web/**
+      - components/core/**
   workflow_dispatch:
 
 permissions:
@@ -13,6 +17,7 @@ jobs:
   API:
     name: "Build and Install API dependencies"
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: components/api
@@ -20,6 +25,13 @@ jobs:
     steps:
       - name: checkout the repo
         uses: actions/checkout@v4
+
+      - name: setup node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: components/api/package-lock.json
 
       - name: "Install dependencies"
         run: npm ci
@@ -29,6 +41,7 @@ jobs:
   web:
     name: "lint, Build and Install Web dependencies"
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: components/web
@@ -36,6 +49,13 @@ jobs:
     steps:
       - name: checkout the repo
         uses: actions/checkout@v4
+
+      - name: setup node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: components/web/package-lock.json
 
       - name: "Install dependencies"
         run: npm ci
@@ -49,6 +69,7 @@ jobs:
   core:
     name: "build & install Core dependencies"
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: components/core
@@ -56,6 +77,13 @@ jobs:
     steps:
       - name: checkout the repo
         uses: actions/checkout@v4
+
+      - name: setup node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: components/core/package-lock.json
 
       - name: "install dependencies"
         run: npm ci
