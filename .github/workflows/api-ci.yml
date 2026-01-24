@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - components/api/**
   workflow_dispatch:
 
 permissions:
