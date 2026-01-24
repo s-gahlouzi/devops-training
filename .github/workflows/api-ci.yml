@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-report-artifact
-          paths: ${{github.workspace}}/components/api
+          path: ${{github.workspace}}/components/api
           if-no-files-found: error
 
       - name: generate code coverage report
