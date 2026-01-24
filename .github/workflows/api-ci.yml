@@ -45,7 +45,7 @@ jobs:
       - name: generate code coverage report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: ${{github.workspace}}/components/api/coverage/coverage.cobertura.xml
+          filename: ${{github.workspace}}/components/api/coverage/cobertura-coverage.xml
           badge: true
           fail_below_min: true
           format: markdown
