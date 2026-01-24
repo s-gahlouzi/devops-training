@@ -10,6 +10,7 @@ export default function ClientLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  console.log("test");
 
   // Don't show navigation on the home page to keep it clean
   const showNavigation = pathname !== "/";
