@@ -1,0 +1,38 @@
+name: API, Web and Core workflow
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - components/core/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  core:
+    name: "build & install Core dependencies"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: components/core
+
+    steps:
+      - name: checkout the repo
+        uses: actions/checkout@v4
+
+      - name: setup node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: components/core/package-lock.json
+
+      - name: "install dependencies"
+        run: npm ci
+
+      - name: "build core"
+        run: npm run build
