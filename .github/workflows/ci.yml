@@ -6,18 +6,43 @@ on:
             - main
 
 jobs:
+    CHANGE_DETECTION:
+        runs-on: ubuntu-latest
+        outputs:
+            core: ${{steps.filter.outputs.core}}
+            api: ${{steps.filter.outputs.api}}
+            web: ${{steps.filter.outputs.web}}
+        steps:
+            - name: "detect path change"
+              id: filter
+              uses: dorny/paths-filter@v3
+              with:
+                  filters: |
+                      core: 
+                          -   components/core/**
+                      web:
+                          -   components/web/**
+                      api:
+                          -   components/api/**
+
     API:
+        needs: [CHANGE_DETECTION]
+        if: ${{needs.CHANGE_DETECTION.outputs.api == 'true'}}
         uses: ./.github/workflows/api-ci.yml
         permissions:
             contents: read
             pull-requests: write
 
     Web:
+        needs: [CHANGE_DETECTION]
+        if: ${{needs.CHANGE_DETECTION.outputs.web == 'true'}}
         uses: ./.github/workflows/web-ci.yml
         permissions:
             contents: read
 
     Core:
+        needs: [CHANGE_DETECTION]
+        if: ${{needs.CHANGE_DETECTION.outputs.core == 'true'}}
         uses: "./.github/workflows/core-ci.yml"
         permissions:
             contents: read

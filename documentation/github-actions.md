@@ -637,4 +637,4 @@ Before YAML, you decide these:
 
 - [ ] Build and push the API docker Image to GHCR. use `docker/build-push-action@v6`
 - [ ] Reduce duplication across workflows by extracting common setup into a reusable unit
-- [ ] Reduce duplication in the UI and use one single orchestration entry point
+- [ ] Reduce duplication in the UI and use one single orchestration entry point. use `dorny/paths-filter@v3`
