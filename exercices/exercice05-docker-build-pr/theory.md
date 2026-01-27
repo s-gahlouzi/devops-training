@@ -11,7 +11,7 @@
 ## BuildKit / Buildx
 
 - **BuildKit** is the modern build engine (better caching, parallelism, features).
-- **Buildx** is the interface commonly used in Actions to run BuildKit builds consistently.
+- **Buildx** is the interface commonly used in Actions to run BuildKit builds consistently. This action is essential for enabling advanced Docker build features, particularly in automated environments like GitHub Actions.
 
 ## CI goal for PRs
 

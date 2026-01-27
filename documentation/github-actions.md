@@ -132,7 +132,6 @@ Think like this:
 GitHub Actions is a popular CI/CD platform for automating your build, test, and deployment pipeline. Docker provides a set of official GitHub Actions for you to use in your workflows. These official actions are reusable, easy-to-use components for building, annotating, and pushing images.
 
 - Key concepts:
-
   - **Workflow**
   - **Job**
   - **Step**
@@ -196,7 +195,6 @@ A **workflow** is a YAML file in:
 - GitHub parses the YAML
 - Validates syntax
 - Builds an execution plan:
-
   - What jobs?
   - In what order?
   - On what machines?
@@ -237,7 +235,6 @@ A **job**:
 - Each job gets its **own isolated runner**
 - Jobs don’t share filesystem or memory
 - Communication happens via:
-
   - Artifacts
   - Caches
   - Outputs
@@ -280,7 +277,6 @@ Internally:
 
 - GitHub downloads the action repo
 - Executes it:
-
   - JavaScript action
   - Docker container
   - Composite steps
@@ -330,7 +326,6 @@ Internally GitHub:
 - Streams logs in real time
 - Stores logs for later viewing
 - Marks:
-
   - Step status
   - Job status
   - Workflow status
@@ -340,17 +335,6 @@ This feeds into:
 - PR checks
 - Branch protection rules
 - Notifications
-
-## Common Beginner Misconceptions
-
-❌ “My runner remembers previous runs”
-✅ Every run is **clean**
-
-❌ “Jobs share files automatically”
-✅ They don’t — use artifacts
-
-❌ “Actions are magic”
-✅ Actions are just scripts
 
 # Advanced GitHub Actions & CI/CD Concepts
 
@@ -428,7 +412,6 @@ Use for:
 
 - You **must not rely on filesystem state**
 - Everything needed must be:
-
   - Installed
   - Cached
   - Downloaded
@@ -541,7 +524,6 @@ Advanced practice:
 
 - Least privilege per workflow
 - Especially for:
-
   - `GITHUB_TOKEN`
   - Deployment workflows
 
@@ -571,25 +553,6 @@ Internally:
 
 ---
 
-## 🔟 Failure Handling & Observability
-
-### Advanced patterns
-
-```yaml
-- run: risky_command
-  continue-on-error: true
-```
-
-```yaml
-if: failure()
-```
-
-- Partial success pipelines
-- Always-run cleanup jobs
-- Notifications on failure
-
----
-
 ## 11️⃣ CI vs CD Separation (Design Principle)
 
 **Good pipelines:**
@@ -605,7 +568,6 @@ Anti-pattern:
 
 ## 12️⃣ Cost Awareness (Often Ignored)
 
-- Matrix explosion
 - Long-running jobs
 - Self-hosted vs GitHub-hosted runners
 
@@ -619,8 +581,6 @@ Advanced teams:
 
 This is **not** a toy pipeline. This is how pipelines are designed for real products.
 
----
-
 ## 1️⃣ Core Design Principles (Non-Negotiable)
 
 Before YAML, you decide these:
@@ -630,82 +590,9 @@ Before YAML, you decide these:
 - CI must finish in minutes, not 30+
 - Developers shouldn’t wait to learn they broke something
 
-### ✅ Clear trust boundaries
-
-- Untrusted code ≠ access to secrets
-- Production deploys must be protected
-
-### ✅ Deterministic & reproducible
-
-- Same input → same output
-- No hidden state
-
 ### ✅ Observable & debuggable
 
 - Logs, artifacts, traceability
-
----
-
-## 2️⃣ Pipeline Stages (High-Level Architecture)
-
-```text
-PR → CI → Merge
-          ↓
-      Main branch
-          ↓
-        Build
-          ↓
-       Deploy
-```
-
-### Logical separation
-
-| Stage  | Responsibility             |
-| ------ | -------------------------- |
-| PR CI  | Code quality & correctness |
-| Build  | Produce immutable artifact |
-| Deploy | Release artifact to env    |
-
----
-
-## 3️⃣ CI (Pull Request) Pipeline
-
-### Trigger
-
-```yaml
-on:
-  pull_request:
-```
-
-### What runs here
-
-- Lint
-- Unit tests
-- Type checks
-- Lightweight security checks
-
-### What does NOT run
-
-- Deployments
-- Heavy E2E
-- Production secrets
-
-### Why
-
-- PRs may come from forks
-- Fast feedback only
-
----
-
-## 4️⃣ Build Pipeline (Main Branch Only)
-
-### Trigger
-
-```yaml
-on:
-  push:
-    branches: [main]
-```
 
 ### Responsibilities
 
@@ -718,233 +605,36 @@ on:
 
 > Build **once**, deploy **many**
 
-Artifacts:
+### wrap up with an Exercise
 
-- Docker images
-- ZIP bundles
-- Binaries
+1. **Create a workflow that validates all components in this repo** :
 
----
+- [ ] Runs PRs and can be manually triggered
+- [ ] Does not allow commit / code change in the repo
+- [ ] Run checks for:
+  - `components/api` (must run `npm ci` + `npm run build`)
+  - `components/core` (must run `npm ci` + `npm run build`)
+  - `components/web` (must run `npm ci` + `npm run lint` + `npm run build`)
 
-## 5️⃣ Deployment Pipelines (Environment-Based)
+- [ ] Prevents a job from hanging forever
+- [ ] Setup Node 20 via `actions/setup-node`
+- [ ] Speed up and Optimize the workflow by Caching project dependencies
+- [ ] Detect changes under:
+  - `components/api/**`
+  - `components/core/**`
+  - `components/web/**`
+- [ ] Run CI only for changed packages
 
-### Environments
+2. **Test API CI** :
 
-- `staging`
-- `production`
+- [ ] Ensure all integration tests are passed before building the API component
 
-```yaml
-environment:
-  name: production
-```
+- [ ] Publish useful build outputs from CI runs to manually download/review HTML reports. use `actions/upload-artifact@v4`
 
-Each environment:
+- [ ] upload and display coverage report on PRs. it must fail for coverage < 60. use `irongut/CodeCoverageSummary@v1.3.0`
 
-- Has scoped secrets
-- Can require approvals
-- Has deployment history
+3. **Image Delivery** :
 
----
-
-## 6️⃣ Promotion Strategy (This Is Key)
-
-❌ Anti-pattern:
-
-> Rebuild separately for staging and prod
-
-✅ Correct pattern:
-
-```text
-Artifact → Staging → Production
-```
-
-Same artifact hash everywhere.
-
----
-
-## 7️⃣ Example High-Level Workflow Layout
-
-```text
-ci.yml              → PR checks
-build.yml           → main branch build
-deploy-staging.yml  → auto
-deploy-prod.yml     → gated
-```
-
-Each workflow has:
-
-- Minimal permissions
-- Single responsibility
-
----
-
-## 8️⃣ Failure Handling & Safety Nets
-
-### Required
-
-- Fail fast
-- Automatic rollback (if possible)
-- Concurrency locks on deploy
-
-```yaml
-concurrency:
-  group: production
-```
-
----
-
-## 9️⃣ Security Hardening (Often Missed)
-
-- Explicit permissions
-- No secrets in CI
-- Environment-protected deployments
-- Dependency pinning
-
-```yaml
-permissions:
-  contents: read
-```
-
----
-
-# PART 2: How Big Companies Structure GitHub Actions
-
-This is where scale changes everything.
-
----
-
-## 1️⃣ Monorepo vs Multirepo Reality
-
-### Monorepo
-
-- Path-based triggers
-- Selective workflows
-- Shared pipelines
-
-```yaml
-on:
-  push:
-    paths:
-      - services/api/**
-```
-
----
-
-### Multirepo
-
-- Centralized CI templates
-- Reusable workflows
-- Strict standards
-
----
-
-## 2️⃣ Central CI Platform Repo
-
-Big companies usually have:
-
-```text
-org-ci/
- └── .github/workflows/
-     ├── node-ci.yml
-     ├── docker-build.yml
-     └── deploy.yml
-```
-
-Used like:
-
-```yaml
-uses: org/org-ci/.github/workflows/node-ci.yml@v3
-```
-
-Benefits:
-
-- Governance
-- Consistency
-- Easy updates
-
----
-
-## 3️⃣ Reusable Workflows + Thin Repos
-
-Application repos:
-
-```yaml
-uses: org/ci/.github/workflows/service.yml@v1
-with:
-  service_name: api
-```
-
-App teams don’t write CI logic.
-
----
-
-## 4️⃣ Self-Hosted Runners at Scale
-
-Why big companies use them:
-
-- Cost control
-- Custom tooling
-- Network access
-- Faster builds
-
-Advanced setup:
-
-- Autoscaling runners
-- Ephemeral VMs
-- Per-team isolation
-
----
-
-## 5️⃣ Permissions & Compliance
-
-Enterprise setups enforce:
-
-- Org-level permissions
-- Restricted actions
-- Required approvals
-- Audit logs
-
-Security teams **care deeply** about this.
-
----
-
-## 6️⃣ Observability & Metrics
-
-They track:
-
-- Pipeline duration
-- Failure rate
-- Flaky tests
-- Cost per pipeline
-
-CI/CD is treated as **production infrastructure**.
-
----
-
-## 7️⃣ Release Strategy Patterns
-
-Common patterns:
-
-- Trunk-based development
-- Feature flags
-- Progressive rollout
-- Canary deploys
-
-CI/CD integrates with:
-
-- Monitoring
-- Alerting
-- Incident response
-
----
-
-## 8️⃣ What Juniors vs Seniors Miss
-
-| Juniors          | Seniors                       |
-| ---------------- | ----------------------------- |
-| “Pipeline works” | “Pipeline is safe & scalable” |
-| YAML focus       | System design                 |
-| Fast once        | Fast always                   |
-| Local fix        | Platform solution             |
-
----
+- [ ] Build and push the API docker Image to GHCR. use `docker/build-push-action@v6`
+- [ ] Reduce duplication across workflows by extracting common setup into a reusable unit
+- [ ] Reduce duplication in the UI and use one single orchestration entry point
