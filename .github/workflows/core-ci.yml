@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - components/core/**
   workflow_dispatch:
 
 permissions:
@@ -21,18 +19,9 @@ jobs:
         working-directory: components/core
 
     steps:
-      - name: checkout the repo
-        uses: actions/checkout@v4
-
-      - name: setup node 20
-        uses: actions/setup-node@v4
+      - name: setup composite setup
+        uses: ./.github/workflows/actions/install-and-cache-node-deps
         with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: components/core/package-lock.json
-
-      - name: "install dependencies"
-        run: npm ci
-
+          path: components/core/package-lock.json
       - name: "build core"
         run: npm run build
