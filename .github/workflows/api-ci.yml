@@ -26,6 +26,7 @@ jobs:
         uses: ./.github/workflows/actions/install-and-cache-node-deps
         with:
           path: components/api/package-lock.json
+          working-directory: components/api
 
       - name: "Run integration tests"
         run: "npm run test:coverage"

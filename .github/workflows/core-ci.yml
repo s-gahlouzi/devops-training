@@ -25,5 +25,6 @@ jobs:
         uses: ./.github/workflows/actions/install-and-cache-node-deps
         with:
           path: components/core/package-lock.json
+          working-directory: components/core
       - name: "build core"
         run: npm run build

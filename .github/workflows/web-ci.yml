@@ -26,6 +26,7 @@ jobs:
         uses: ./.github/workflows/actions/install-and-cache-node-deps
         with:
           path: components/web/package-lock.json
+          working-directory: components/web
 
       - name: "run lint"
         run: npm run lint
