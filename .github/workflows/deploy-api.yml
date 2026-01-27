@@ -32,7 +32,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: setup Node version 20 and cache dependencies
-              uses: actions/node-setup@v4
+              uses: actions/setup-node@v4
               with:
                   node-version: ${{env.NODE_VERSION}}
                   cache: ${{env.PACKAGE_MANAGER}}
