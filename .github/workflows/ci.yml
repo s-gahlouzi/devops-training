@@ -1,0 +1,23 @@
+name: "main orchestration entry point"
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    API:
+        uses: ./.github/workflows/api-ci.yml
+        permissions:
+            contents: read
+            pull-requests: write
+
+    Web:
+        uses: ./.github/workflows/web-ci.yml
+        permissions:
+            contents: read
+
+    Core:
+        uses: "./.github/workflows/core-ci.yml"
+        permissions:
+            contents: read
