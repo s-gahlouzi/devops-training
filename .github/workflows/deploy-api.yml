@@ -51,6 +51,6 @@ jobs:
             - name: Push API image to GHCR
               uses: docker/build-push-action@v6
               with:
-                  context: ${{github.workflow}}/components/api
+                  context: ${{github.workspace}}/components/api
                   file: components/api/Dockerfile
                   tags: bettaibi/api:latest
