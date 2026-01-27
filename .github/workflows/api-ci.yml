@@ -19,10 +19,13 @@ jobs:
         working-directory: components/api
 
     steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+
       - name: setup composite setup
         uses: ./.github/workflows/actions/install-and-cache-node-deps
         with:
-          path: components/core/package-lock.json
+          path: components/api/package-lock.json
 
       - name: "Run integration tests"
         run: "npm run test:coverage"

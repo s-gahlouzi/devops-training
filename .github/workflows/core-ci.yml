@@ -19,6 +19,8 @@ jobs:
         working-directory: components/core
 
     steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
       - name: setup composite setup
         uses: ./.github/workflows/actions/install-and-cache-node-deps
         with:
