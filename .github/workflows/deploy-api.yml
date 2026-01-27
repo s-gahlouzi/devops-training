@@ -29,10 +29,10 @@ jobs:
 
         steps:
             - name: Checkout the repo
-              uses: action/checkout@v4
+              uses: actions/checkout@v4
 
             - name: setup Node version 20 and cache dependencies
-              uses: action/node-setup@v4
+              uses: actions/node-setup@v4
               with:
                   node-version: ${{env.NODE_VERSION}}
                   cache: ${{env.PACKAGE_MANAGER}}
