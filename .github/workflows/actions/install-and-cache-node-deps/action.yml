@@ -30,5 +30,5 @@ runs:
               cache-dependency-path: ${{inputs.path}}
 
         - name: "install dependencies"
-          shell: bs
+          shell: bash
           run: npm ci
