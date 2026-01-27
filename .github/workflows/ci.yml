@@ -13,6 +13,8 @@ jobs:
             api: ${{steps.filter.outputs.api}}
             web: ${{steps.filter.outputs.web}}
         steps:
+            - name: checkout the repo
+              uses: actions/checkout@v4
             - name: "detect path change"
               id: filter
               uses: dorny/paths-filter@v3
