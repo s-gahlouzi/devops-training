@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  api:
+  build-api:
    runs-on: ubuntu-latest
    timeout-minutes: 15
    defaults:
@@ -29,5 +29,18 @@ jobs:
     - name: build api
       run: npm run build
 
-
+  test-api:
+    needs: build-api
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: components/api
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+      - name: install deps
+        run: npm ci
+      - name: run tests
+        run: npm run test:coverage
 
