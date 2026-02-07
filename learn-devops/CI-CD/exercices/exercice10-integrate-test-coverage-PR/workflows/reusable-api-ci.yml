@@ -24,9 +24,6 @@ jobs:
           cache-dependency-path: components/api/package-lock.json
           working-directory: components/api
 
-      - name: Install dependencies
-        run: npm ci
-
       - name: Run Tests
         run: "npm run test:coverage"
 
