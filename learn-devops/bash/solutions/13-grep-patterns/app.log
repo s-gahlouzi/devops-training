@@ -1,0 +1,8 @@
+2026-02-04 10:00:01 INFO User login: user123
+2026-02-04 10:00:15 ERROR Failed to connect to database
+2026-02-04 10:00:16 INFO Retry attempt 1
+2026-02-04 10:00:17 ERROR Connection timeout
+2026-02-04 10:00:20 WARN High memory usage: 85%
+2026-02-04 10:00:25 INFO Successfully connected
+2026-02-04 10:01:00 ERROR Invalid token
+2026-02-04 10:01:05 INFO Request processed

@@ -1,0 +1,6 @@
+service,port,status,memory_mb
+api,3000,running,245
+web,8080,running,512
+worker,3001,stopped,0
+cache,6379,running,128
+database,5432,running,1024

@@ -1,0 +1,20 @@
+[
+  {
+    "name": "api",
+    "port": 3000,
+    "status": "running",
+    "version": "2.1.0"
+  },
+  {
+    "name": "web",
+    "port": 8080,
+    "status": "running",
+    "version": "1.5.2"
+  },
+  {
+    "name": "worker",
+    "port": 3001,
+    "status": "stopped",
+    "version": "1.0.0"
+  }
+]
