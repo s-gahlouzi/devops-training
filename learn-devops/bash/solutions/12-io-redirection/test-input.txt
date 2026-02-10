@@ -1,0 +1,6 @@
+INFO: Application started
+ERROR: Database connection failed
+INFO: Retry attempt 1
+ERROR: Retry failed
+DEBUG: Memory usage: 45%
+INFO: Shutting down
