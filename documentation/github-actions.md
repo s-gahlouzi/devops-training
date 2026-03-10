@@ -635,6 +635,39 @@ Before YAML, you decide these:
 
 3. **Image Delivery** :
 
-- [ ] Build and push the API docker Image to GHCR. use `docker/build-push-action@v6`
-- [ ] Reduce duplication across workflows by extracting common setup into a reusable unit
-- [ ] Reduce duplication in the UI and use one single orchestration entry point. use `dorny/paths-filter@v3`
+#### Phase 1 — Build & Push
+
+- [ ] Build and push the API docker image to GHCR. use `docker/build-push-action@v6`
+- [ ] Authenticate to GHCR using `docker/login-action@v3` with the `GITHUB_TOKEN`
+- [ ] Tag the image with the **git SHA** (`github.sha`) and, on `main`, `latest`. use the `tags` input on `docker/metadata-action@v5`. When pushing per PR, add a **PR-specific tag** (e.g. `pr-<number>-<sha>`) so each PR deployment has a unique, pullable image
+- [ ] Add OCI labels to the image (source repo, commit, description, license). use `docker/metadata-action@v5`
+- [ ] **Push strategy — Deploy every PR and on merge to `main`:** (1) On **PRs**, push with tags like `pr-<number>-<sha>` for deployable preview images; (2) on **merge to `main`**, push with `sha` and `latest` for production. Use conditional logic (e.g. `docker/metadata-action` with different `tags` for PR vs main). Plan **cleanup** of PR-tagged images when PRs are closed (see Bonus).
+
+#### Phase 2 — Optimization & Performance
+
+- [ ] Speed up Docker builds in CI by caching layers. use the `cache-from` / `cache-to` inputs on `docker/build-push-action@v6` with `type=gha`
+
+#### Phase 3 — Security & Quality Gates
+
+- [ ] Scan the built image for vulnerabilities **before** pushing. use `aquasecurity/trivy-action@master` with `severity: CRITICAL,HIGH` and fail the workflow on findings
+- [ ] After pushing, run the container in CI and verify the health endpoint responds (`curl --fail http://localhost:3001/health`). This is a basic smoke test
+- [ ] Ensure the workflow uses **least-privilege permissions** — only grant `packages: write` and `contents: read`
+
+#### Phase 4 — DRY & Orchestration
+
+- [ ] Reduce duplication across workflows by extracting common setup (checkout, Node setup, npm cache) into a **composite action** under `.github/actions/setup-node/action.yml`
+- [ ] Reduce duplication in the CI triggers and use **one single orchestration workflow** that detects which components changed and fans out jobs accordingly. use `dorny/paths-filter@v3`
+- [ ] Make the image delivery job **depend on** the test and build jobs (`needs: [test-api, build-api]`) so images are only produced for passing builds
+
+#### Phase 5 — Extending the Pipeline
+
+- [ ] Create a `Dockerfile` for the **web** component (multi-stage: deps → build → production with `node:20-alpine` and `next start`)
+- [ ] Add an image delivery job for the **web** component that mirrors the API pipeline (build, scan, tag, push to GHCR)
+- [ ] Implement a **concurrency guard** so parallel pushes to `main` don't produce conflicting images. use the `concurrency` key with `cancel-in-progress: true`
+- [ ] **Multi-platform builds:** Set up QEMU and Buildx to build for `linux/amd64` and `linux/arm64` so the image runs on both x86 and ARM (e.g. Apple Silicon, AWS Graviton). use `docker/setup-qemu-action@v3` and `docker/setup-buildx-action@v3`
+
+#### Bonus — Going Further
+
+- [ ] Add a **cleanup workflow** that deletes untagged / old GHCR images on a schedule (`on: schedule`). Also delete or expire **PR-tagged images** when the PR is closed/merged. use `actions/delete-package-versions@v5` or a workflow triggered by `pull_request` with `types: [closed]`
+- [ ] Post a **deployment summary** as a PR comment after the image is pushed (image name, tag, size, vulnerability count). use `actions/github-script@v7`
+- [ ] Build a **promotion workflow** triggered by `workflow_dispatch` that re-tags an existing image from `sha-xxx` to `staging` or `production` without rebuilding, using `docker buildx imagetools create`
