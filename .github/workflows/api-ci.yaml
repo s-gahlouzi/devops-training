@@ -3,7 +3,7 @@ on:
   pull_request:
     paths:
       - "components/api/**"
-      # - ".github/workflows/api-ci.yaml"
+      - ".github/workflows/api-ci.yaml"
   workflow_dispatch:
 
 permissions:
