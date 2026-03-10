@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   web:
-   runs-on: ubuntu-20.04
+   runs-on: ubuntu-latest
    timeout-minutes: 15
    defaults:
     run:
